@@ -1,7 +1,14 @@
-use alexandria_math::sha256::sha256;
+use alexandria_math::sha256::sha256 as old_sha256;
+use core::sha256::compute_sha256_u32_array;
+use core::ArrayTrait;
 
 fn main() -> felt252 {
     fib(16)
+}
+
+fn expand_slice(slice: [u32;8]) -> Array<u32> {
+    let [v0, v1, v2, v3, v4, v5, v6, v7]= slice;
+    array![v0, v1, v2, v3, v4, v5, v6, v7]
 }
 
 fn fib(mut n: felt252) -> felt252 {
