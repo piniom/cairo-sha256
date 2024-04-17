@@ -82,44 +82,6 @@ fn u8_arr_to_32_arr(mut data: Span<u8>) -> (Array<u32>, u32, u32){
     (result,last_input_word,last_input_num_bytes)
 }
 
-fn from_u8Array_to_32Array(mut data: Span<u8>)->(Array<u32>,u32,u32) {
-    let mut result= array![];
-    let mut overflow:u32=0;
-    loop {
-        match (data.pop_front(),data.pop_front(),data.pop_front(),data.pop_front()) {
-            (Option::Some(val1),Option::Some(val2),Option::Some(val3),Option::Some(val4)) => {
-                let mut value = (*val1).into() * 0x1000000;
-                value = value + (*val2).into() * 0x10000;
-                value = value + (*val3).into() * 0x100;
-                value = value + (*val4).into();
-                result.append(value);     
-            },
-            (Option::None, _, _, _) =>{break;},
-            (Option::Some(val1), Option::None, _, _) =>{
-                overflow = (*val1).into() * 0x1000000;
-                break;
-
-            },
-            (Option::Some(val1), Option::Some(val2), Option::None, _) => {
-                let mut value = (*val1).into() * 0x1000000;
-                value += (*val2).into() * 0x10000;
-                overflow = value;
-                break;
-            },
-            (Option::Some(val1), Option::Some(val2), Option::Some(val3), Option::None) =>{
-                let mut value = (*val1).into() * 0x1000000;
-                value += (*val2).into() * 0x10000;
-                value += (*val3).into() * 0x100;
-                overflow = value;
-                break;
-            }
-        };
-    };
-    (result,overflow,overflow)
-}
-
-
-
 fn main() -> () {
     let input_1 : Array<u32> = array![1]; //u32
     let input_2 = array![0, 0, 0, 1,  0,0,1]; //u8
